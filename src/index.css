@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/src/fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/src/fonts/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@theme {
+  --gradient-planet: linear-gradient(
+    135deg,
+    #1d2948 0%,
+    #141d33 25%,
+    #0f1628 38%,
+    #050a16 100%
+  );
+
+  --color-snow: #ffffff;
+  --color-gray: #b2b2b2;
+
+  --font-only: 'Satoshi', Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--gradient-planet);
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-title);
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  p,
+  span {
+    font-family: var(--font-body);
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  video,
+  img {
+    max-width: 100%;
+    display: block;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      max-width: 40rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      max-width: 48rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 64rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 80rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 96rem;
+    }
+  }
+}
