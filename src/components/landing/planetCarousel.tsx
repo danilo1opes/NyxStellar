@@ -1,7 +1,7 @@
 import React from 'react';
 import { planetsData } from '../../data/planets';
 import { AnimatePresence, motion, Variants } from 'motion/react';
-import InfoCard from './InfoCard';
+import InfoCard from './PlanetCard';
 import OrbitalRing from './orbitalRing';
 import { useCosmicGlow } from '../../hooks/useCosmicGlow';
 
