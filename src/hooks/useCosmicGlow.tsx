@@ -54,12 +54,12 @@ export function useCosmicGlow(color: string) {
 
             {/* Glow Adicional Superior Esquerdo */}
             <div
-              className="absolute top-32 left-60 rounded-full"
+              className="absolute -top-60 -left-60 rounded-full"
               style={{
-                width: '500px',
-                height: '500px',
-                background: `radial-gradient(circle, ${glowColor}30 0%, transparent 60%)`,
-                filter: 'blur(100px)',
+                width: '700px',
+                height: '700px',
+                background: `radial-gradient(circle, ${glowColor}70 0%, ${glowColor}30 50%, transparent 80%)`,
+                filter: 'blur(130px)',
               }}
             />
           </motion.div>

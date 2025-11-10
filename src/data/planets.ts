@@ -46,7 +46,7 @@ export const planetsData: PlanetData[] = [
     temperature: '60°C a 90°C',
     climate: 'Tropical',
     svgPath: '/assets/planet-green.svg',
-    color: '#05430B',
+    color: '#067A2F',
     dropShadow:
       'drop-shadow-[0_0_100px_rgba(40,255,200,0.9)] drop-shadow-[0_0_50px_rgba(10,180,120,0.7)] drop-shadow-[0_0_20px_rgba(160,255,230,0.9)]',
   },
@@ -59,7 +59,7 @@ export const planetsData: PlanetData[] = [
     temperature: '10°C a 40°C',
     climate: 'Temperado',
     svgPath: '/assets/planet-blue.svg',
-    color: '#022F59',
+    color: '#1A75FF',
     dropShadow:
       'drop-shadow-[0_0_90px_rgba(80,180,255,0.9)] drop-shadow-[0_0_45px_rgba(40,120,255,0.7)]',
   },
