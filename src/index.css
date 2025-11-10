@@ -15,6 +15,7 @@
 }
 
 @theme {
+  --gradient-title: linear-gradient(#ededed 0%, #b6b6b6 100%);
   --gradient-planet: linear-gradient(
     135deg,
     #1d2948 0%,
@@ -22,7 +23,6 @@
     #0f1628 38%,
     #050a16 100%
   );
-
   --color-snow: #ffffff;
   --color-gray: #b2b2b2;
 

@@ -1,8 +1,37 @@
 import { leftItems, rightItems } from '../../data/navitems';
 import { GiCrystalBars } from 'react-icons/gi';
 import { GiCrystalGrowth } from 'react-icons/gi';
+import { motion } from 'motion/react';
+import type { Variants } from 'motion/react';
 import React from 'react';
-import NavItem from '../ui/navitem';
+import NavItem from '../../ui/navitem';
+
+const titleVariant: Variants = {
+  smooth: {
+    scale: 1.1,
+    textShadow: '0px 0px 8px rgb(255,255,255)',
+    boxShadow: '0px 0px 0px rgb(255,255,255)',
+    transition: {
+      duration: 5,
+      repeat: Infinity,
+      repeatType: 'reverse',
+    },
+  },
+};
+
+const iconVariant: Variants = {
+  hidden: {
+    x: -20,
+  },
+  visible: {
+    x: 0,
+    transition: {
+      duration: 5,
+      repeat: Infinity,
+      repeatType: 'reverse',
+    },
+  },
+};
 
 function Navbar() {
   const [open, setOpen] = React.useState<boolean>(false);
@@ -37,8 +66,8 @@ function Navbar() {
   return (
     <header>
       {/* Desktop */}
-      <nav className="flex items-center justify-between lg:justify-evenly mt-10 lg:mt-14 px-6 lg:px-0">
-        <ul className="hidden lg:flex gap-26 font-only font-normal text-gray text-base 2xl:text-lg 2xl:gap-36">
+      <nav className="flex justify-between lg:grid lg:grid-cols-3 items-center mt-10 lg:mt-14 px-6">
+        <ul className="hidden lg:flex justify-start font-only font-normal text-gray text-base lg:text-lg lg:gap-32">
           {leftItems.map((item) => (
             <li key={item.label}>
               <NavItem {...item} />
@@ -46,9 +75,13 @@ function Navbar() {
           ))}
         </ul>
 
-        <h1 className="font-only font-normal text-snow text-2xl sm:text-3xl 2xl:text-4xl tracking-[0.3rem]">
+        <motion.h1
+          className="font-only lg:flex lg:justify-center font-normal text-snow text-2xl sm:text-3xl 2xl:text-4xl tracking-[0.3rem]"
+          variants={titleVariant}
+          animate="smooth"
+        >
           NyxStellar
-        </h1>
+        </motion.h1>
 
         <button
           onClick={toggleMenu}
@@ -60,14 +93,20 @@ function Navbar() {
             open ? 'Fechar menu de navegação' : 'Abrir menu de navegação'
           }
         >
-          {open ? (
-            <GiCrystalBars aria-hidden="true" size={28} />
-          ) : (
-            <GiCrystalGrowth aria-hidden="true" size={28} />
-          )}
+          <motion.button
+            variants={iconVariant}
+            initial="hidden"
+            animate="visible"
+          >
+            {open ? (
+              <GiCrystalBars aria-hidden="true" size={28} />
+            ) : (
+              <GiCrystalGrowth aria-hidden="true" size={28} />
+            )}
+          </motion.button>
         </button>
 
-        <ul className="hidden lg:flex gap-26 font-only font-normal text-gray text-base 2xl:text-lg 2xl:gap-36">
+        <ul className="hidden lg:flex justify-end font-only font-normal text-gray text-base lg:text-lg lg:gap-28">
           {rightItems.map((item) => (
             <li key={item.label}>
               <NavItem {...item} />
@@ -91,13 +130,16 @@ function Navbar() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Botão de fechar */}
-          <button
+          <motion.button
             onClick={closeMenu}
             className="absolute top-10 right-6 text-snow cursor-pointer"
             aria-label="Fechar menu de navegação"
+            variants={iconVariant}
+            initial="hidden"
+            animate="visible"
           >
             <GiCrystalBars aria-hidden="true" size={28} />
-          </button>
+          </motion.button>
 
           {/* Logo no mobile */}
           <h2 className="font-only font-normal text-snow text-2xl tracking-[0.3rem] mb-12">

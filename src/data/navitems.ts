@@ -1,4 +1,4 @@
-import { NavbarItem } from '../components/ui/navitem';
+import { NavbarItem } from '../ui/navitem';
 
 export const leftItems: Array<NavbarItem> = [
   { url: '/', label: 'Ínicio' },

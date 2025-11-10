@@ -1,22 +1,11 @@
-import Footer from './components/common/footer';
-import Navbar from './components/common/navbar';
+import PlanetCarousel from './components/landing/planetCarousel';
+import Layout from './components/layout';
 
 function App() {
   return (
-    <>
-      <header>
-        <Navbar />
-      </header>
-
-      <main id="main-content">
-        {/* Landing */}
-        <section></section>
-
-        <section></section>
-      </main>
-
-      <Footer />
-    </>
+    <Layout>
+      <PlanetCarousel />
+    </Layout>
   );
 }
 
