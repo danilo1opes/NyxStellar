@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { planetsData } from '../../data/planets';
 import { AnimatePresence, motion } from 'motion/react';
 import PlanetCard from './PlanetCard';

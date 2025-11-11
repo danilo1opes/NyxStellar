@@ -1,4 +1,4 @@
-import PlanetCarousel from './components/landing/PlanetCarousel';
+import PlanetCarousel from './components/landing/planetCarousel';
 import Layout from './components/layout';
 
 function App() {
