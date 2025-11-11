@@ -1,37 +1,12 @@
 import { PlanetData } from '../../data/planets';
-import { motion, Variants } from 'motion/react';
+import { motion } from 'motion/react';
+import { getPlanetVariants } from '../../animations';
 
 interface PlanetProps {
   planet: PlanetData;
   position: 'left' | 'center' | 'right';
   onClick: () => void;
 }
-
-const getVariants = (position: 'left' | 'center' | 'right'): Variants => ({
-  hidden: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: position === 'center' ? [0, -15, 0] : [0, -10, 0],
-    transition: {
-      opacity: { duration: 0.5 },
-      scale: { duration: 0.5 },
-      y: {
-        duration: position === 'center' ? 5 : 4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-    },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.8,
-    transition: { duration: 0.5 },
-  },
-});
 
 function Planet({ planet, position, onClick }: PlanetProps) {
   const sizes = {
@@ -63,7 +38,7 @@ function Planet({ planet, position, onClick }: PlanetProps) {
         zIndex: position === 'center' ? 10 : 5,
       }}
       onClick={position !== 'center' ? onClick : undefined}
-      variants={getVariants(position)}
+      variants={getPlanetVariants(position)} // animação
       initial="hidden"
       animate="visible"
       exit="exit"
@@ -101,7 +76,7 @@ function Planet({ planet, position, onClick }: PlanetProps) {
         </div>
       </div>
 
-      {/* Nomes dos Planetas */}
+      {/* Nome dos Planetas */}
       {position !== 'center' && (
         <motion.p
           className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm tracking-widest text-gray-400 whitespace-nowrap"

@@ -1,69 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { planetsData } from '../../data/planets';
-import { AnimatePresence, motion, Variants } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import PlanetCard from './PlanetCard';
-import OrbitalRing from './orbitalRing';
+import OrbitalRing from './PlanetOrbitalRing';
 import { useCosmicGlow } from '../../hooks/useCosmicGlow';
-
-const titleVariants: Variants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8 },
-  },
-  exit: { opacity: 0, y: 20, transition: { duration: 0.3 } },
-};
-
-const infoVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.8, delay: 0.1 },
-  },
-  exit: { opacity: 0, transition: { duration: 0.3 } },
-};
-
-const planetaCentral: Variants = {
-  hidden: {
-    scale: 0.5,
-    opacity: 0,
-  },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-  exit: {
-    scale: 0.5,
-    opacity: 0,
-    transition: { duration: 0.3 },
-  },
-};
-
-const planetasBtt: Variants = {
-  rest: {
-    scale: 1,
-    opacity: 0.7,
-  },
-  tap: {
-    scale: 0.9,
-    opacity: 1,
-    transition: {
-      duration: 0.2,
-    },
-  },
-};
+import {
+  titleVariants,
+  infoVariants,
+  planetaCentral,
+  planetasBtt,
+} from '../../animations';
+import PlanetLoader from './PlanetLoader';
 
 function PlanetCarousel() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { GlowElement } = useCosmicGlow(planetsData[currentIndex].color);
 
-  // Preload Image
+  // Preload das imagens
   useEffect(() => {
     const imagePromises = planetsData.map((planet) => {
       return new Promise((resolve, reject) => {
@@ -112,24 +66,8 @@ function PlanetCarousel() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
-  if (!imagesLoaded) {
-    return (
-      <div className="container md:pt-12 relative">
-        <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1200px] flex items-center justify-center">
-          <div className="text-center">
-            <motion.div
-              className="w-16 h-16 md:w-24 md:h-24 border-4 border-snow/20 border-t-snow rounded-full mx-auto mb-4"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            />
-            <p className="text-white/60 text-sm md:text-base">
-              Carregando planetas...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // PlanetLoader
+  if (!imagesLoaded) return <PlanetLoader message="Explorando o universo..." />;
 
   return (
     <div className="container md:pt-12 relative">
@@ -156,20 +94,29 @@ function PlanetCarousel() {
         {/* Planeta Central */}
         <div className="absolute -left-4 md:left-0 lg:-left-15 lg:-top-40 inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
           <AnimatePresence mode="wait">
-            <motion.img
+            <motion.div
               key={visible.center.id}
-              src={visible.center.svgPath}
-              alt={visible.center.name}
               variants={planetaCentral}
               initial="hidden"
               animate="visible"
               exit="exit"
-              loading="eager"
-              className={`w-[380px] h-[380px] md:w-[400px] md:h-[400px] lg:w-[1000px] lg:h-[1000px] object-contain ${visible.center.dropShadow}`}
-              style={{
-                willChange: 'transform, opacity',
-              }}
-            />
+              className={`w-[380px] h-[380px] md:w-[400px] md:h-[400px] lg:w-[1000px] lg:h-[1000px] flex items-center justify-center ${visible.center.dropShadow}`}
+              style={{ willChange: 'transform, opacity' }}
+            >
+              <img
+                src={visible.center.svgPath}
+                alt={visible.center.name}
+                loading="eager"
+                decoding="async"
+                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                style={{
+                  opacity: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            </motion.div>
           </AnimatePresence>
         </div>
 
@@ -180,16 +127,27 @@ function PlanetCarousel() {
           aria-label="Planeta anterior"
         >
           <div className="flex flex-col items-center gap-1 md:gap-2">
-            <motion.img
-              src={visible.left.svgPath}
-              alt={visible.left.name}
-              loading="lazy"
-              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+            <motion.div
               variants={planetasBtt}
               initial="rest"
               animate="rest"
               whileTap="tap"
-            />
+              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+            >
+              <img
+                src={visible.left.svgPath}
+                alt={visible.left.name}
+                loading="lazy"
+                decoding="async"
+                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                style={{
+                  opacity: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            </motion.div>
             <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
               {visible.left.name}
             </h3>
@@ -203,16 +161,27 @@ function PlanetCarousel() {
           aria-label="Próximo planeta"
         >
           <div className="flex flex-col items-center gap-1 md:gap-2">
-            <motion.img
-              src={visible.right.svgPath}
-              alt={visible.right.name}
-              loading="lazy"
-              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+            <motion.div
               variants={planetasBtt}
               initial="rest"
               animate="rest"
               whileTap="tap"
-            />
+              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+            >
+              <img
+                src={visible.right.svgPath}
+                alt={visible.right.name}
+                loading="lazy"
+                decoding="async"
+                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                style={{
+                  opacity: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            </motion.div>
             <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
               {visible.right.name}
             </h3>

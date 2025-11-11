@@ -1,23 +1,12 @@
 import { ReactNode } from 'react';
-import { Variants } from 'motion';
 import { motion } from 'motion/react';
-import Navbar from '../common/navbar';
+import { imgVariants } from '../../animations';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
 
 interface LayoutProps {
   children: ReactNode;
 }
-
-const imgVariants: Variants = {
-  effect: {
-    opacity: [5, 0.3, 5],
-    transition: {
-      duration: 5,
-      ease: 'easeInOut',
-      repeat: Infinity,
-      repeatType: 'reverse',
-    },
-  },
-};
 
 export default function Layout({ children }: LayoutProps) {
   return (
@@ -35,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
       />
       <Navbar />
       <main className="container">{children}</main>
+      <Footer />
     </div>
   );
 }

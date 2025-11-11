@@ -1,19 +1,11 @@
 import { motion, Variants } from 'motion/react';
+import { orbitalVariants } from '../../animations';
 
 interface Orbital {
   radius: number;
   delay?: number;
   rotation?: number;
 }
-
-const orbitalVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 1, delay },
-  }),
-};
 
 function OrbitalRing({ radius, delay = 0, rotation = 65 }: Orbital) {
   return (
