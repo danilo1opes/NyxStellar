@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { planetsData } from '../../data/planets';
-import { AnimatePresence, motion } from 'motion/react';
+import React from 'react';
 import PlanetCard from './PlanetCard';
 import OrbitalRing from './PlanetOrbitalRing';
+import PlanetLoader from './PlanetLoader';
+import { planetsData } from '../../data/planets';
+import { AnimatePresence, motion } from 'motion/react';
 import { useCosmicGlow } from '../../hooks/useCosmicGlow';
 import {
   titleVariants,
@@ -10,15 +11,14 @@ import {
   planetaCentral,
   planetasBtt,
 } from '../../animations';
-import PlanetLoader from './PlanetLoader';
 
 function PlanetCarousel() {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState<number>(0);
+  const [imagesLoaded, setImagesLoaded] = React.useState(false);
   const { GlowElement } = useCosmicGlow(planetsData[currentIndex].color);
 
   // Preload das imagens
-  useEffect(() => {
+  React.useEffect(() => {
     const imagePromises = planetsData.map((planet) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -57,7 +57,7 @@ function PlanetCarousel() {
     );
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') prev();
       if (e.key === 'ArrowRight') next();
@@ -83,12 +83,45 @@ function PlanetCarousel() {
             transformStyle: 'preserve-3d',
           }}
         >
-          <OrbitalRing radius={600} delay={0} rotation={65} />
-          <OrbitalRing radius={700} delay={0.5} rotation={65} />
-          <OrbitalRing radius={800} delay={1} rotation={65} />
-          <OrbitalRing radius={900} delay={1.5} rotation={65} />
-          <OrbitalRing radius={1000} delay={2} rotation={65} />
-          <OrbitalRing radius={1100} delay={2.5} rotation={65} />
+          <AnimatePresence mode="wait">
+            {/* Anéis */}
+            <OrbitalRing
+              key={`ring-600-${visible.center.id}`}
+              radius={600}
+              delay={0}
+              rotation={65}
+            />
+            <OrbitalRing
+              key={`ring-700-${visible.center.id}`}
+              radius={700}
+              delay={0.5}
+              rotation={65}
+            />
+            <OrbitalRing
+              key={`ring-800-${visible.center.id}`}
+              radius={800}
+              delay={1}
+              rotation={65}
+            />
+            <OrbitalRing
+              key={`ring-900-${visible.center.id}`}
+              radius={900}
+              delay={1.5}
+              rotation={65}
+            />
+            <OrbitalRing
+              key={`ring-1000-${visible.center.id}`}
+              radius={1000}
+              delay={2}
+              rotation={65}
+            />
+            <OrbitalRing
+              key={`ring-1100-${visible.center.id}`}
+              radius={1100}
+              delay={2.5}
+              rotation={65}
+            />
+          </AnimatePresence>
         </div>
 
         {/* Planeta Central */}
