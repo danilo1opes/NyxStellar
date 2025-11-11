@@ -22,8 +22,7 @@ export default function Footer() {
           transition={{ duration: 1 }}
           className="text-white/70 text-sm md:text-base tracking-wide"
         >
-          © {new Date().getFullYear()} danilo1opes — Interestellar 🪐 e
-          animação.
+          © {new Date().getFullYear()} danilo1opes — Interestellar Animation 🪐
         </motion.p>
 
         {/* Link GitHub */}

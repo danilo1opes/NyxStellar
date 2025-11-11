@@ -125,7 +125,7 @@ function PlanetCarousel() {
         </div>
 
         {/* Planeta Central */}
-        <div className="absolute -left-4 md:left-0 lg:-left-15 lg:-top-40 inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
+        <div className="absolute lg:-left-5 lg:-top-5 2xl:-top-8 inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
           <AnimatePresence mode="wait">
             <motion.div
               key={visible.center.id}
@@ -133,7 +133,7 @@ function PlanetCarousel() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`w-[380px] h-[380px] md:w-[400px] md:h-[400px] lg:w-[1000px] lg:h-[1000px] flex items-center justify-center ${visible.center.dropShadow}`}
+              className={`w-[500px] h-[500px] md:w-[400px] md:h-[400px] lg:w-[1000px] lg:h-[1000px] 2xl:w-[1100px] 2xl:h-[1100px] flex items-center justify-center ${visible.center.dropShadow}`}
               style={{ willChange: 'transform, opacity' }}
             >
               <img
@@ -144,9 +144,16 @@ function PlanetCarousel() {
                 onLoad={(e) => (e.currentTarget.style.opacity = '1')}
                 style={{
                   opacity: 0,
-                  width: '100%',
-                  height: '100%',
+                  width: '76.5%',
+                  height: '92.5%',
+                  maxWidth: '1018px',
+                  maxHeight: '1018px',
                   objectFit: 'contain',
+                  transform: 'translateZ(0)',
+                  WebkitTransform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  display: 'block',
                 }}
               />
             </motion.div>
@@ -248,7 +255,7 @@ function PlanetCarousel() {
           <AnimatePresence mode="wait">
             <motion.div
               key={`info${visible.center.id}`}
-              className="flex flex-wrap mb-16 md:mb-0 md:grid md:grid-cols-3 lg:flex lg:flex-wrap justify-center gap-4 md:gap-6 lg:gap-12 xl:gap-16 max-w-7xl px-4 w-full"
+              className="flex flex-wrap mb-16 lg:flex lg:flex-wrap justify-center md:mb-12 lg:mb-0 gap-4 md:gap-6 lg:gap-12 xl:gap-16 max-w-7xl px-4 w-full"
               variants={infoVariants}
               initial="hidden"
               animate="visible"

@@ -9,7 +9,9 @@ export const orbitalVariants: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 1.2,
+      duration: 2.9,
+      repeat: Infinity,
+      repeatType: 'reverse',
       delay: delay * 0.3,
       ease: 'easeOut',
     },
