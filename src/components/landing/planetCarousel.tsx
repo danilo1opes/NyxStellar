@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { planetsData } from '../../data/planets';
 import { AnimatePresence, motion, Variants } from 'motion/react';
-import InfoCard from './PlanetCard';
+import PlanetCard from './PlanetCard';
 import OrbitalRing from './orbitalRing';
 import { useCosmicGlow } from '../../hooks/useCosmicGlow';
 
@@ -10,86 +10,74 @@ const titleVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.9 },
+    transition: { duration: 0.8 },
   },
-  exit: { opacity: 0, y: 20 },
+  exit: { opacity: 0, y: 20, transition: { duration: 0.3 } },
 };
 
 const infoVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 1.9, delay: 0.1 },
+    transition: { duration: 0.8, delay: 0.1 },
   },
-  exit: { opacity: 0 },
+  exit: { opacity: 0, transition: { duration: 0.3 } },
 };
 
 const planetaCentral: Variants = {
   hidden: {
-    scale: 0.8,
+    scale: 0.5,
     opacity: 0,
-    rotate: 0,
   },
   visible: {
     scale: 1,
     opacity: 1,
-    rotate: 20,
     transition: {
-      duration: 1.2,
+      duration: 0.6,
       ease: 'easeOut',
     },
   },
   exit: {
-    scale: 0.8,
+    scale: 0.5,
     opacity: 0,
-    rotate: 0,
-    transition: { duration: 0.6 },
+    transition: { duration: 0.3 },
   },
 };
 
 const planetasBtt: Variants = {
   rest: {
-    scale: 0.8,
+    scale: 1,
     opacity: 0.7,
-    filter: 'brightness(0.8)',
-    rotate: 0,
-  },
-  hover: {
-    scale: 0.9,
-    opacity: 1,
-    filter: 'brightness(1.1)',
-    rotate: 15,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
   },
   tap: {
-    scale: 1.1,
+    scale: 0.9,
     opacity: 1,
-    filter: 'brightness(1.3) drop-shadow(0 0 20px rgba(255, 255, 255, 0.6))',
-    rotate: -10,
     transition: {
-      type: 'spring',
-      stiffness: 400,
-      damping: 15,
-    },
-  },
-  exit: {
-    scale: 0.8,
-    opacity: 0,
-    filter: 'brightness(0.6)',
-    rotate: 30,
-    transition: {
-      duration: 0.5,
-      ease: 'easeIn',
+      duration: 0.2,
     },
   },
 };
 
 function PlanetCarousel() {
-  const [currentIndex, setCurrentIndex] = React.useState<number>(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const { GlowElement } = useCosmicGlow(planetsData[currentIndex].color);
+
+  // Preload Image
+  useEffect(() => {
+    const imagePromises = planetsData.map((planet) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = planet.svgPath;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then(() => setImagesLoaded(true))
+      .catch(() => setImagesLoaded(true));
+  }, []);
 
   function getVisiblePlanets() {
     const total = planetsData.length;
@@ -115,7 +103,7 @@ function PlanetCarousel() {
     );
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') prev();
       if (e.key === 'ArrowRight') next();
@@ -124,14 +112,34 @@ function PlanetCarousel() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
+  if (!imagesLoaded) {
+    return (
+      <div className="container md:pt-12 relative">
+        <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1200px] flex items-center justify-center">
+          <div className="text-center">
+            <motion.div
+              className="w-16 h-16 md:w-24 md:h-24 border-4 border-snow/20 border-t-snow rounded-full mx-auto mb-4"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+            <p className="text-white/60 text-sm md:text-base">
+              Carregando planetas...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container md:pt-12 relative">
       <GlowElement />
+
       {/* Display Planeta */}
-      <div className="relative w-full h-[600px] md:h-[1200px]">
-        {/* 3D Orbital*/}
+      <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1200px]">
+        {/* 3D Orbital - Apenas Desktop */}
         <div
-          className="absolute inset-0 z-0"
+          className="hidden lg:block absolute inset-0 z-0"
           style={{
             perspective: '1500px',
             transformStyle: 'preserve-3d',
@@ -146,87 +154,75 @@ function PlanetCarousel() {
         </div>
 
         {/* Planeta Central */}
-        <div className="absolute inset-0 flex -top-50 -left-13 items-center justify-center z-10 pointer-events-none">
-          <motion.img
-            key={visible.center.id}
-            src={visible.center.svgPath}
-            width={1000}
-            height={1000}
-            alt={visible.center.name}
-            variants={planetaCentral}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className={`max-w-full max-h-full object-contain ${visible.center.dropShadow}`}
-          />
+        <div className="absolute -left-4 md:left-0 lg:-left-15 lg:-top-40 inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={visible.center.id}
+              src={visible.center.svgPath}
+              alt={visible.center.name}
+              variants={planetaCentral}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              loading="eager"
+              className={`w-[380px] h-[380px] md:w-[400px] md:h-[400px] lg:w-[1000px] lg:h-[1000px] object-contain ${visible.center.dropShadow}`}
+              style={{
+                willChange: 'transform, opacity',
+              }}
+            />
+          </AnimatePresence>
         </div>
 
-        {/* Planetas Clicaveis Esquerda */}
+        {/* Botão Esquerda */}
         <button
           onClick={prev}
-          className="absolute left-4 md:left-12 lg:-left-20 top-1/2 -translate-y-1/2 z-20 group cursor-pointer"
+          className="absolute -left-10 top-68 md:left-4 lg:left-12 xl:-left-20 md:top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
+          aria-label="Planeta anterior"
         >
-          <AnimatePresence mode="wait">
-            <div className="flex flex-col items-center gap-2">
-              <motion.img
-                src={visible.left.svgPath}
-                width={180}
-                height={180}
-                alt={`Previous: ${visible.left.name}`}
-                className="group-hover:scale-110 transition-all duration-300"
-                variants={planetasBtt}
-                initial="rest"
-                animate="rest"
-                whileHover="hover"
-                whileTap="tap"
-                exit="exit"
-                drag
-                dragConstraints={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                dragElastic={0.6}
-                dragMomentum={false}
-              />
-              <h3 className="text-snow font-only text-base md:text-lg text-center">
-                {visible.left.name}
-              </h3>
-            </div>
-          </AnimatePresence>
+          <div className="flex flex-col items-center gap-1 md:gap-2">
+            <motion.img
+              src={visible.left.svgPath}
+              alt={visible.left.name}
+              loading="lazy"
+              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+              variants={planetasBtt}
+              initial="rest"
+              animate="rest"
+              whileTap="tap"
+            />
+            <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
+              {visible.left.name}
+            </h3>
+          </div>
         </button>
 
-        {/* Planetas Clicaveis Direita */}
+        {/* Botão Direita */}
         <button
           onClick={next}
-          className="absolute right-4 md:right-12 lg:-right-20 top-1/2 -translate-y-1/2 z-20 group cursor-pointer"
+          className="absolute -right-10 top-68 md:right-4 lg:right-12 xl:-right-20 md:top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
+          aria-label="Próximo planeta"
         >
-          <AnimatePresence mode="wait">
-            <div className="flex flex-col items-center gap-2">
-              <motion.img
-                src={visible.right.svgPath}
-                width={180}
-                height={180}
-                alt={`Next: ${visible.right.name}`}
-                className="group-hover:scale-110 transition-all duration-300"
-                variants={planetasBtt}
-                initial="rest"
-                animate="rest"
-                whileHover="hover"
-                whileTap="tap"
-                exit="exit"
-                drag
-                dragConstraints={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                dragElastic={0.4}
-                dragMomentum={false}
-              />
-              <h3 className="text-snow font-only text-base md:text-lg text-center">
-                {visible.right.name}
-              </h3>
-            </div>
-          </AnimatePresence>
+          <div className="flex flex-col items-center gap-1 md:gap-2">
+            <motion.img
+              src={visible.right.svgPath}
+              alt={visible.right.name}
+              loading="lazy"
+              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+              variants={planetasBtt}
+              initial="rest"
+              animate="rest"
+              whileTap="tap"
+            />
+            <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
+              {visible.right.name}
+            </h3>
+          </div>
         </button>
       </div>
 
       {/* Informações */}
-      <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
-        <div className="flex flex-col items-center pt-8 md:pt-14 pointer-events-auto">
+      <div className="relative lg:absolute lg:inset-x-0 lg:top-0 z-20 mt-4 lg:mt-0 lg:pointer-events-none">
+        <div className="flex flex-col items-center lg:pt-8 lg:md:pt-14 lg:pointer-events-auto">
           {/* Nome dos Planetas */}
           <AnimatePresence mode="wait">
             <motion.h2
@@ -236,7 +232,7 @@ function PlanetCarousel() {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
-              className="text-5xl lg:text-8xl 2xl:text-9xl font-light mb-8 tracking-[1rem] text-center uppercase"
+              className="text-3xl md:text-5xl lg:text-8xl 2xl:text-9xl font-light mb-4 md:mb-6 lg:mb-8 tracking-[0.5rem] md:tracking-[0.8rem] lg:tracking-[1rem] text-center uppercase"
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -246,27 +242,27 @@ function PlanetCarousel() {
             </motion.h2>
           </AnimatePresence>
 
-          {/* Informações */}
+          {/* Cards de Informação */}
           <AnimatePresence mode="wait">
             <motion.div
               key={`info${visible.center.id}`}
-              className="flex flex-wrap justify-center gap-6 md:gap-12 lg:gap-16 max-w-7xl px-4"
+              className="flex flex-wrap mb-16 md:mb-0 md:grid md:grid-cols-3 lg:flex lg:flex-wrap justify-center gap-4 md:gap-6 lg:gap-12 xl:gap-16 max-w-7xl px-4 w-full"
               variants={infoVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
             >
-              <InfoCard label="GALÁXIA" value={visible.center.galaxy} />
-              <InfoCard label="DIÂMETRO" value={visible.center.diameter} />
-              <InfoCard
+              <PlanetCard label="GALÁXIA" value={visible.center.galaxy} />
+              <PlanetCard label="DIÂMETRO" value={visible.center.diameter} />
+              <PlanetCard
                 label="DIA TERRESTRE"
                 value={visible.center.dayLength}
               />
-              <InfoCard
-                label="TEMPERATURA MÉDIA"
+              <PlanetCard
+                label="TEMPERATURA"
                 value={visible.center.temperature}
               />
-              <InfoCard label="CLIMA" value={visible.center.climate} />
+              <PlanetCard label="CLIMA" value={visible.center.climate} />
             </motion.div>
           </AnimatePresence>
         </div>
