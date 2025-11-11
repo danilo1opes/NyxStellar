@@ -15,7 +15,12 @@ import {
 function PlanetCarousel() {
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
   const [imagesLoaded, setImagesLoaded] = React.useState(false);
+  const [touchStart, setTouchStart] = React.useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = React.useState<number | null>(null);
   const { GlowElement } = useCosmicGlow(planetsData[currentIndex].color);
+
+  // Distância mínima para considerar um swipe
+  const minSwipeDistance = 50;
 
   // Preload das imagens
   React.useEffect(() => {
@@ -57,6 +62,30 @@ function PlanetCarousel() {
     );
   }
 
+  // Handlers para swipe no mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      next();
+    } else if (isRightSwipe) {
+      prev();
+    }
+  };
+
   React.useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') prev();
@@ -74,7 +103,14 @@ function PlanetCarousel() {
       <GlowElement />
 
       {/* Display Planeta */}
-      <div className="relative w-full h-[500px] md:h-[700px] lg:h-[1200px]">
+      <div
+        className="relative w-full h-[500px] md:h-[700px] lg:h-[1200px]"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        aria-label="Carrossel de planetas"
+        role="region"
+      >
         {/* 3D Orbital - Apenas Desktop */}
         <div
           className="hidden lg:block absolute inset-0 z-0"
@@ -82,6 +118,7 @@ function PlanetCarousel() {
             perspective: '1500px',
             transformStyle: 'preserve-3d',
           }}
+          aria-hidden="true"
         >
           <AnimatePresence mode="wait">
             {/* Anéis */}
@@ -127,7 +164,7 @@ function PlanetCarousel() {
         {/* Planeta Central */}
         <div className="absolute lg:-left-5 lg:-top-5 2xl:-top-8 inset-0 flex items-center justify-center z-10 pointer-events-none px-4">
           <AnimatePresence mode="wait">
-            <motion.div
+            <motion.figure
               key={visible.center.id}
               variants={planetaCentral}
               initial="hidden"
@@ -139,8 +176,11 @@ function PlanetCarousel() {
               <img
                 src={visible.center.svgPath}
                 alt={visible.center.name}
+                title={`${visible.center.name} - ${visible.center.climate}`}
                 loading="eager"
                 decoding="async"
+                fetchPriority="high"
+                itemProp="image"
                 onLoad={(e) => (e.currentTarget.style.opacity = '1')}
                 style={{
                   opacity: 0,
@@ -156,15 +196,17 @@ function PlanetCarousel() {
                   display: 'block',
                 }}
               />
-            </motion.div>
+            </motion.figure>
           </AnimatePresence>
         </div>
 
+        {/* Botões - Apenas Desktop (md: e acima) */}
         {/* Botão Esquerda */}
         <button
           onClick={prev}
-          className="absolute -left-10 top-68 md:left-4 lg:left-12 xl:-left-20 md:top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
-          aria-label="Planeta anterior"
+          className="hidden md:block absolute left-4 lg:left-12 xl:-left-20 top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
+          aria-label={`Ver planeta anterior: ${visible.left.name}`}
+          title={`Planeta ${visible.left.name}`}
         >
           <div className="flex flex-col items-center gap-1 md:gap-2">
             <motion.div
@@ -172,7 +214,7 @@ function PlanetCarousel() {
               initial="rest"
               animate="rest"
               whileTap="tap"
-              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+              className="w-24 h-24 lg:w-[180px] lg:h-[180px]"
             >
               <img
                 src={visible.left.svgPath}
@@ -188,7 +230,7 @@ function PlanetCarousel() {
                 }}
               />
             </motion.div>
-            <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
+            <h3 className="text-snow font-only text-sm lg:text-base text-center">
               {visible.left.name}
             </h3>
           </div>
@@ -197,8 +239,9 @@ function PlanetCarousel() {
         {/* Botão Direita */}
         <button
           onClick={next}
-          className="absolute -right-10 top-68 md:right-4 lg:right-12 xl:-right-20 md:top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
-          aria-label="Próximo planeta"
+          className="hidden md:block absolute right-4 lg:right-12 xl:-right-20 top-1/2 -translate-y-1/2 z-20 cursor-pointer touch-manipulation"
+          aria-label={`Ver próximo planeta: ${visible.right.name}`}
+          title={`Planeta ${visible.right.name}`}
         >
           <div className="flex flex-col items-center gap-1 md:gap-2">
             <motion.div
@@ -206,7 +249,7 @@ function PlanetCarousel() {
               initial="rest"
               animate="rest"
               whileTap="tap"
-              className="w-16 h-16 md:w-24 md:h-24 lg:w-[180px] lg:h-[180px]"
+              className="w-24 h-24 lg:w-[180px] lg:h-[180px]"
             >
               <img
                 src={visible.right.svgPath}
@@ -222,15 +265,35 @@ function PlanetCarousel() {
                 }}
               />
             </motion.div>
-            <h3 className="text-snow font-only text-xs md:text-sm lg:text-base text-center">
+            <h3 className="text-snow font-only text-sm lg:text-base text-center">
               {visible.right.name}
             </h3>
           </div>
         </button>
+
+        {/* Indicadores - Apenas Mobile */}
+        <div
+          className="md:hidden absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2"
+          aria-label="Navegação de planetas"
+        >
+          {planetsData.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex ? 'bg-snow w-8' : 'bg-snow/30'
+              }`}
+              aria-label={`Ir para planeta ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Informações */}
-      <div className="relative lg:absolute lg:inset-x-0 lg:top-0 z-20 mt-4 lg:mt-0 lg:pointer-events-none">
+      <div
+        className="relative lg:absolute lg:inset-x-0 lg:top-0 z-20 mt-4 lg:mt-0 lg:pointer-events-none"
+        aria-label="Informações do planeta"
+      >
         <div className="flex flex-col items-center lg:pt-8 lg:md:pt-14 lg:pointer-events-auto">
           {/* Nome dos Planetas */}
           <AnimatePresence mode="wait">
@@ -260,6 +323,7 @@ function PlanetCarousel() {
               initial="hidden"
               animate="visible"
               exit="exit"
+              role="list"
             >
               <PlanetCard label="GALÁXIA" value={visible.center.galaxy} />
               <PlanetCard label="DIÂMETRO" value={visible.center.diameter} />
