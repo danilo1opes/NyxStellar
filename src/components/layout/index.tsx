@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { imgVariants } from '../../animations';
-import Navbar from '../common/Navbar';
-import Footer from '../common/Footer';
+import Navbar from '../common/navbar_temp';
+import Footer from '../common/footer_temp';
 
 interface LayoutProps {
   children: ReactNode;
