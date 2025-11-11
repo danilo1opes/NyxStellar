@@ -1,4 +1,4 @@
-export * from './planetsCarousel';
+export * from './carousel';
 export * from './planet';
 export * from './planetOrbital';
 export * from './planetLayout';
