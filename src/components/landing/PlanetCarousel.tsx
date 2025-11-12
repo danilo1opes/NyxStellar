@@ -19,7 +19,7 @@ function PlanetCarousel() {
   const [touchEnd, setTouchEnd] = React.useState<number | null>(null);
   const { GlowElement } = useCosmicGlow(planetsData[currentIndex].color);
 
-  // Distância mínima para considerar um swipe
+  // Distância mínima pro swipe
   const minSwipeDistance = 50;
 
   // Preload das imagens
@@ -200,7 +200,6 @@ function PlanetCarousel() {
           </AnimatePresence>
         </div>
 
-        {/* Botões - Apenas Desktop (md: e acima) */}
         {/* Botão Esquerda */}
         <button
           onClick={prev}

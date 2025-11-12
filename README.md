@@ -1,73 +1,103 @@
-# React + TypeScript + Vite
+# 🪐 NyxStellar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Explorador interativo de planetas com animações imersivas, construído com Framer Motion e React.
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.0-ff69b4?style=flat&logo=framer)](https://www.framer.com/motion/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🌐 **[Visualizar o Projeto](https://nyxstellar.vercel.app/)**
 
-## React Compiler
+> 💡 **OBS:** Para uma melhor experiência, recomendo utilizar o projeto em **desktop** para aproveitar todos os efeitos visuais e animações.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📋 Índice
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Destaques Técnicos](#-destaques-técnicos)
+- [Autor](#-autor)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🎯 Sobre o Projeto
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**NyxStellar** é uma experiência interativa espacial criada com o intuito de aprendizagem com Frame Motion:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- 🌌 Carrossel de planetas com órbitas animadas
+- ✨ Campo de estrelas dinâmico com efeitos
+- 🎨 Glows cósmicos que se adaptam a cor de cada planeta
+- 📱 Suporte completo para gestos touch (swipe) no mobile
+- ⌨️ Navegação por teclado (SEO - setas esquerda/direita)
+- 🔄 Transições suaves e animações fluidas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+O projeto foi desenvolvido como uma demonstração avançada das capacidades do **Framer Motion**, explorando animações, variantes complexas e otimizações de performance.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## ✨ Funcionalidades
+
+### 🎨 Animações & Efeitos
+
+- ▪️ Carrossel com anéis orbitais animados
+- ▪️ Transições suaves entre planetas com `AnimatePresence`
+- ▪️ Glows cósmicos dinâmicos adaptados à cor do planeta
+- ▪️ Efeitos de hover e tap nos botões laterais
+- ▪️ Animação de loading personalizada
+
+### 🎮 Interatividade
+
+- ▪️ Navegação por teclado (ArrowLeft/ArrowRight)
+- ▪️ Suporte a touch (swipe) no mobile
+- ▪️ Indicadores de posição (mobile)
+- ▪️ Botões de navegação laterais (desktop)
+- ▪️ Menu mobile responsivo com animações
+
+### 📱 Responsividade
+
+- ▪️ Design adaptativo para mobile, tablet e desktop
+- ▪️ Anéis orbitais visíveis apenas em telas grandes (lg+)
+- ▪️ Glows cósmicos desabilitados no mobile para performance
+- ▪️ Tamanhos e espaçamentos responsivos
+
+### ♿ Acessibilidade
+
+- ▪️ ARIA labels em botões e regiões
+- ▪️ Navegação por teclado completa
+- ▪️ Focus indicators visíveis
+- ▪️ Suporte a ESC para fechar menu mobile
+- ▪️ Atributos semânticos (role, aria-expanded, etc.)
+
+### ⚡ Performance
+
+- ▪️ Preload de imagens dos planetas
+- ▪️ Lazy loading de imagens laterais
+- ▪️ Otimizações CSS (will-change, transform3d)
+- ▪️ Debounce em mudanças de cor do glow
+- ▪️ Conditional rendering para mobile/desktop
+
+---
+
+## 👨‍💻 Autor
+
+**Danilo Lopes**
+
+- GitHub: [@danilo1opes](https://github.com/danilo1opes)
+- LinkedIn: [Danilo Lopes](https://linkedin.com/in/danilo1opes)
+
+---
+
+## 📄 Licença
+
+Este projeto é publico, você pode visualizar e testar em seu dispositivo local.
+
+---
+
+<div align="center">
+  <p>Desenvolvido por <a href="https://github.com/danilo1opes">danilo1opes</a></p>
+  <p>© 2025 NyxStellar • Todos os direitos reservados</p>
+</div>
