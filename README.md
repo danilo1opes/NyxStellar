@@ -2,11 +2,11 @@
 
 > Explorador interativo de planetas com animações imersivas, construído com Framer Motion e React.
 
-[![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.0-ff69b4?style=flat&logo=framer)](https://www.framer.com/motion/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-19.1.1-blue?style=flat&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Framer Motion](https://img.shields.io/badge/Motion-12.23.24-ff69b4?style=flat&logo=framer)](https://motion.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.16-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-7.1.7-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 
 🌐 **[Visualizar o Projeto](https://nyxstellar.vercel.app/)**
 
